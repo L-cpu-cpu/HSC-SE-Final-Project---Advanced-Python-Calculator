@@ -3,5 +3,5 @@
 # About this program:
 
 # Dependencies:
-# This program requires the following libraries installed with a virtual environment created and activated:
+This program requires the following libraries installed with a virtual environment created and activated:
 math
