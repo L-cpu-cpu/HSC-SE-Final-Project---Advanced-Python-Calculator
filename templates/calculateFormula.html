@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block content %}
+<form id="formulaSelect" method="POST" action="{{ url_for('calculateFormula') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <h1>Select a Formula</h1>
+    <p>Please select a category to view the available formulas.</p>
+    <label><input type="radio" name="category" value="areaAndPerim">Areas and Perimeters</label>
+    <label><input type="radio" name="category" value="Trig">Trigonometry</label>
+    <label><input type="radio" name="category" value="poly">Polynomials</label>
+    <label><input type="radio" name="category" value="phys">Physics</label>
+
+    <br><br>
+
+    <label for="formula">Select a formula subcategory:</label>
+    <select id="formula" name="formula">
+        <option value="">Please choose a subcategory</option>
+    </select>
+    <label for="specificFormula">Select a formula:</label>
+    <select id="specificFormula" name="specificFormula">
+        <option value="">Choose a formula</option>
+    </select>
+
+    <div id="dynamicInputs"></div>
+
+    <button type="submit">Solve</button>
+</form>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/formulaDropdown.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<form method="POST" action="{{ url_for('regressionCalc') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <table>
+    <tr>
+        <th>x</th>
+        <th>y</th>
+    </tr>
+    {% for i in range(5) %}
+    <tr>
+        <td><input name="x{{ i }}" type="number" step="any" required /></td>
+        <td><input name="y{{ i }}" type="number" step="any" required /></td>
+    </tr>
+    {% endfor %}
+    </table>
+    <button type="submit">Calculate Regression</button>
+</form>
+
+{% if formula %}
+    <p><strong>Regression Equation:</strong> {{ formula }}</p>
+{% endif %}
+{% endblock %}

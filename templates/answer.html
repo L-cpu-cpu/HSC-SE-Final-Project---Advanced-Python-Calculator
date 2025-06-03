@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block content %}
+<head>
+    {{ EQinput }} = 
+</head>
+<body>
+    <p id="answerValue">{{ answer }}</p>
+
+
+    <form id="saveVarForm">
+        <select name="varName" required>
+            {% for var in variables %}
+                <option value="{{ var[0] }}">{{ var[0] }} = {{ var[1] }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Save to Variable</button>
+    </form>
+
+    <form id="saveResultForm">
+        <input type="text" name="keyword" placeholder="Keyword to save result under" required>
+        <button type="submit">Save to Table</button>
+    </form>
+
+    <p id="saveStatusMsg"></p>
+</body>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/saveResult.js') }}"></script>
+{% endblock %}

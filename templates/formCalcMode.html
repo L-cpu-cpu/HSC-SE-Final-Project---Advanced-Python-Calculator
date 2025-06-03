@@ -1,0 +1,23 @@
+<!--Template for calculation mode-->
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <h1>Input</h1>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <form action="/formCalcMode.html" method="POST" class="box">
+      <div class="col-auto">
+        <label name="equationInput" class="equationInputLabel">Input equation here</label>
+        <input name="input" type="equation" class="input" id="equationInput" pattern="[A-Za-z0-9.*^()+-/]" title="Invalid characters." placeholder="e.g: 1 + 1" required=>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3">Submit</button>
+      </div>
+      <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
+    </form>
+  </div>
+</div>
+{% endblock %}
