@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Set Global Rounding Value</h2>
+<form method="POST" action="{{ url_for('set_rounding') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="rounding">Decimal Places:</label>
+    <input type="number" name="rounding" min="0" max="10" required value="{{ session.get('rounding', 2) }}">
+    <button type="submit">Set Rounding</button>
+</form>
+{% if confirmation %}
+    <p>{{ confirmation }}</p>
+{% endif %}
+{% endblock %}

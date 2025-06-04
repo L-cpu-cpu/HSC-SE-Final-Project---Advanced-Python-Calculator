@@ -7,6 +7,7 @@ from Modules import formatInput as fi
 
 
 import math as mt
+from flask import session
 # CALCULATE
 
 
@@ -18,7 +19,8 @@ def calculate(equation, ans):
     equation = fi.formatInputVar(equation)
     equation = fi.addMT(equation)
     ans = eval(str(equation))
-    return ans
+    rounding = session.get("rounding", 2)
+    return round(ans, rounding)
 
 
 def postCalcVar(result, varName):

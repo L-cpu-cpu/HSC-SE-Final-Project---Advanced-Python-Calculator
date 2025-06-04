@@ -370,7 +370,9 @@ def run_formula(formula_name, input_list, ans):
             return "Formula not found."
 
         # Call the function with unpacked inputs
-        return func(*inputs)
+        result = func(*inputs)
+        rounding = session.get("rounding", 2)
+        return round(result, rounding)
 
     except Exception as e:
         return f"Error: {str(e)}"

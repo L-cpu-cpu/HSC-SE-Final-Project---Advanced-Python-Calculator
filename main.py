@@ -177,11 +177,15 @@ def regressionCalc():
         try:
             x_vals = []
             y_vals = []
-            for i in range(5):  # match the number of rows in HTML
-                x = float(request.form.get(f"x{i}"))
-                y = float(request.form.get(f"y{i}"))
-                x_vals.append(x)
-                y_vals.append(y)
+            i = 0
+            while True:
+                x = request.form.get(f"x{i}")
+                y = request.form.get(f"y{i}")
+                if x is None or y is None:
+                    break
+                x_vals.append(float(x))
+                y_vals.append(float(y))
+                i += 1
 
             x_array = np.array(x_vals).reshape(-1, 1)
             y_array = np.array(y_vals)
@@ -190,6 +194,20 @@ def regressionCalc():
             formula = f"Error: {e}"
 
     return render_template("regression.html", formula=formula)
+
+# New route for settings page to set rounding
+@app.route("/settings.html", methods=["GET", "POST"])
+def set_rounding():
+    confirmation = None
+    if request.method == "POST":
+        try:
+            rounding = int(request.form.get("rounding"))
+            session['rounding'] = rounding
+            confirmation = f"Rounding set to {rounding} decimal places."
+        except:
+            confirmation = "Invalid rounding value."
+
+    return render_template("settings.html", confirmation=confirmation)
 
 # Endpoint for logging CSP violations
 @app.route("/csp_report", methods=["POST"])

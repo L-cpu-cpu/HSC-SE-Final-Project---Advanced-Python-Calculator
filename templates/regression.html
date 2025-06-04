@@ -2,7 +2,7 @@
 {% block content %}
 <form method="POST" action="{{ url_for('regressionCalc') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <table>
+    <table id="inputTable">
     <tr>
         <th>x</th>
         <th>y</th>
@@ -14,10 +14,14 @@
     </tr>
     {% endfor %}
     </table>
+    <button id="addRowBtn" type="button">Add Row</button>
+<button id="removeRowBtn" type="button">Remove Row</button>
     <button type="submit">Calculate Regression</button>
 </form>
-
 {% if formula %}
     <p><strong>Regression Equation:</strong> {{ formula }}</p>
 {% endif %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/regressionRows.js') }}"></script>
+{% endblock %}
 {% endblock %}
