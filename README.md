@@ -3,6 +3,8 @@
 # About this program:
 This Python-powered calculator aims to incorporate as much functionality as possible from a scientific calculator into a Progressive Web Application (PWA).
 
+This PWA is done for the Year 12 HSC Software Engineering final project
+
 # Features:
 - A calculation that allows for the input of equations
 - A formula mode that has equations for areas, trigonometry, quadratics and physics
