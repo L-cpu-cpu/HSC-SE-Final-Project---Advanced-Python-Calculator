@@ -4,6 +4,32 @@ document.addEventListener("DOMContentLoaded", function () {
     if (form) {
         form.addEventListener("submit", function (event) {
             event.preventDefault();
+
+            const inputs = form.querySelectorAll('input[name="dynamicInput"]');
+            const forbiddenChars = /[<>'";]/;
+            let invalidInput = false;
+
+            inputs.forEach(input => {
+                if (forbiddenChars.test(input.value)) {
+                    invalidInput = true;
+                    input.value = "";
+                }
+            });
+
+            if (invalidInput) {
+                const existingAlert = form.querySelector(".alert-box");
+                if (existingAlert) existingAlert.remove();
+
+                const alertBox = document.createElement("div");
+                alertBox.textContent = "Invalid characters detected. Please avoid using <, >, ', \", or ;.";
+                alertBox.style.color = "red";
+                alertBox.style.marginTop = "10px";
+                alertBox.classList.add("alert-box");
+                const submitBtn = form.querySelector("button[type='submit']");
+                form.insertBefore(alertBox, submitBtn);
+                return;
+            }
+
             const selectedFormula = document.getElementById("specificFormula").value;
             const equation = formulaEquations[selectedFormula] || "";
             // Fallback warning if equation doesn't exist
@@ -174,6 +200,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 option.textContent = item.text;
                 itemsSelect.appendChild(option);
             });
+
+            // Apply glow to first dropdown
+            itemsSelect.classList.add('glow');
+            setTimeout(() => itemsSelect.classList.remove('glow'), 800);
         });
     });
     itemsSelect.addEventListener('change', function () {
@@ -189,6 +219,11 @@ document.addEventListener("DOMContentLoaded", function () {
             option.textContent = sub.text;
             subFormulaSelect.appendChild(option);
         });
+
+        // Apply glow to second dropdown
+        subFormulaSelect.classList.add('glow');
+        setTimeout(() => subFormulaSelect.classList.remove('glow'), 800);
+
         subFormulaSelect.addEventListener('change', function () {
             const inputContainer = document.getElementById('dynamicInputs');
             inputContainer.innerHTML = ''; // Clear any previous inputs
@@ -204,12 +239,26 @@ document.addEventListener("DOMContentLoaded", function () {
             const placeholders = categoryPlaceholders[selectedText] || [];
 
             for (let i = 0; i < numInputs; i++) {
+                const inputWrapper = document.createElement('div');
+                inputWrapper.className = 'input-container';
+
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.name = "dynamicInput";
-                input.placeholder = placeholders[i] || `Input ${i + 1}`;
-                inputContainer.appendChild(input);
-                inputContainer.appendChild(document.createElement('br'));
+                input.placeholder = " ";
+                input.required = true;
+                input.pattern = "^[A-Za-z0-9.*^()+\\-\\/\\s]+$";
+
+                // Add glow class temporarily
+                input.classList.add('glow');
+                setTimeout(() => input.classList.remove('glow'), 800);
+
+                const label = document.createElement('label');
+                label.textContent = placeholders[i] || `Input ${i + 1}`;
+
+                inputWrapper.appendChild(input);
+                inputWrapper.appendChild(label);
+                inputContainer.appendChild(inputWrapper);
             }
         });
     });

@@ -1,13 +1,29 @@
 {% extends 'layout.html' %}
 {% block content %}
-<form id="formulaSelect" method="POST" action="{{ url_for('calculateFormula') }}">
+<form id="formulaSelect" method="POST" action="{{ url_for('calculateFormula') }}" novalidate onsubmit="return false;">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <h1>Select a Formula</h1>
+    <h1>Formula Mode</h1>
     <p>Please select a category to view the available formulas.</p>
-    <label><input type="radio" name="category" value="areaAndPerim">Areas and Perimeters</label>
-    <label><input type="radio" name="category" value="Trig">Trigonometry</label>
-    <label><input type="radio" name="category" value="poly">Polynomials</label>
-    <label><input type="radio" name="category" value="phys">Physics</label>
+    <label class="custom-radio">
+        <input type="radio" name="category" value="areaAndPerim">
+        <span class="radio-mark"></span>
+        Areas and Perimeters
+    </label>
+    <label class="custom-radio">
+        <input type="radio" name="category" value="Trig">
+        <span class="radio-mark"></span>
+        Trigonometry
+    </label>
+    <label class="custom-radio">
+        <input type="radio" name="category" value="poly">
+        <span class="radio-mark"></span>
+        Polynomials
+    </label>
+    <label class="custom-radio">
+        <input type="radio" name="category" value="phys">
+        <span class="radio-mark"></span>
+        Physics
+    </label>
 
     <br><br>
 
@@ -20,11 +36,21 @@
         <option value="">Choose a formula</option>
     </select>
 
-    <div id="dynamicInputs"></div>
+    <div id="dynamicInputs" class="input-container"></div>
 
-    <button type="submit">Solve</button>
+    <button type="submit" class="submitText">Solve</button>
 </form>
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/formulaDropdown.js') }}"></script>
+<script src="{{ url_for('static', filename='js/noSpecialChar.js') }}"></script>
+{% endblock %}
+{% block footer %}
+    {% include "partials/footer.html" %}
+    {% block how_to_use %}
+    <p><strong>How to Use:</strong> Choose a formula category like "Physics", then pick a subcategory and specific formula. Fill in the inputs and click Solve.</p>
+    <p><strong>Note:</strong> You can also input the keywords of saved results or variable names too!</p>
+    <p><strong>Math functions:</strong> SIN, COS, TAN, SQRT, PI, CBRT, EXP, LOG, DEGREES, RADIANS, ACOS, ASIN, ATAN, E, FACTORIAL</p>
+    <p><strong>For example:</strong> a + 2 * (SIN(20))^3</p>
+    {% endblock %}
 {% endblock %}

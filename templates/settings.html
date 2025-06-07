@@ -1,13 +1,22 @@
 {% extends "layout.html" %}
 {% block content %}
-<h2>Set Global Rounding Value</h2>
+<h1>Settings</h1>
+<p>Set Global Rounding Value</p>
 <form method="POST" action="{{ url_for('set_rounding') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <label for="rounding">Decimal Places:</label>
-    <input type="number" name="rounding" min="0" max="10" required value="{{ session.get('rounding', 2) }}">
-    <button type="submit">Set Rounding</button>
+    <div class="input-container">
+        <input class="input-container" type="number" name="rounding" min="0" max="10" required value="{{ session.get('rounding', 2) }}">
+        <label for="rounding">Decimal Places:</label>
+    </div>
+    <button type="submit" class="submitText">Set Rounding</button>
 </form>
 {% if confirmation %}
     <p>{{ confirmation }}</p>
 {% endif %}
+{% endblock %}
+{% block footer %}
+    {% include "partials/footer.html" %}
+    {% block how_to_use %}
+    <p><strong>How to Use:</strong> Input a number form 1-10 to round all answers in formula mode and calculation mode to that number of significant figures.</p>
+    {% endblock %}
 {% endblock %}

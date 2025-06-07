@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<h1>Regression Mode</h1>
 <form method="POST" action="{{ url_for('regressionCalc') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <table id="inputTable">
@@ -9,19 +10,36 @@
     </tr>
     {% for i in range(5) %}
     <tr>
-        <td><input name="x{{ i }}" type="number" step="any" required /></td>
-        <td><input name="y{{ i }}" type="number" step="any" required /></td>
+        <td>
+            <div class="input-container">
+                <input name="x{{ i }}" type="number" step="any" required placeholder=" ">
+                <label for="x{{ i }}">x{{ i }}</label>
+            </div>
+        </td>
+        <td>
+            <div class="input-container">
+                <input name="y{{ i }}" type="number" step="any" required placeholder=" ">
+                <label for="y{{ i }}">y{{ i }}</label>
+            </div>
+        </td>
     </tr>
     {% endfor %}
     </table>
-    <button id="addRowBtn" type="button">Add Row</button>
-<button id="removeRowBtn" type="button">Remove Row</button>
-    <button type="submit">Calculate Regression</button>
+    <button id="addRowBtn" type="button" class="sortNsearch">Add Row</button>
+<button id="removeRowBtn" type="button" class="sortNsearch">Remove Row</button>
+    <button type="submit" class="submitText">Calculate Regression</button>
 </form>
 {% if formula %}
     <p><strong>Regression Equation:</strong> {{ formula }}</p>
+    <img src="{{ url_for('static', filename=plot_path) }}" alt="Regression Graph" style="max-width: 100%; height: auto;">
 {% endif %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/regressionRows.js') }}"></script>
 {% endblock %}
+{% endblock %}
+{% block footer %}
+    {% include "partials/footer.html" %}
+    {% block how_to_use %}
+    <p><strong>How to Use:</strong> Fill in the table of X and Y inputs. Click Add row or rRemove row as needed. Once ready, click Calculate regression.</p>
+    {% endblock %}
 {% endblock %}

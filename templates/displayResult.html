@@ -1,29 +1,55 @@
 {% extends 'layout.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Saved Results</title>
-</head>
-<body>
-    <h1>Results</h1>
+    <h1>Saved Results</h1>
+    <form method="get" action="{{ url_for('results') }}">
+        <label for="sort">Sort by:</label>
+        <select name="sort" id="sort">
+            <option value="keyword" {% if request.args.get('sort') == 'keyword' %}selected{% endif %}>Keyword</option>
+            <option value="result" {% if request.args.get('sort') == 'result' %}selected{% endif %}>Result</option>
+        </select>
+        <button type="submit" class="sortNsearch">Sort</button>
+    </form>
+    <form method="get" action="{{ url_for('results') }}">
+        <div class="input-container">
+            <input type="text" name="search" id="search" value="{{ request.args.get('search', '') }}" placeholder=" ">
+            <label for="search">Search by keyword:</label>
+        </div>
+        <button type="submit" class="sortNsearch">Search</button>
+    </form>
     <table border="1">
         <thead>
             <tr>
                 <th>Keyword</th>
                 <th>Result</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for result in results %}
-            <tr>
-                <td>{{result['keyword']}}</td>
-                <td>{{result['result']}}</td>
-            </tr>
-            {% endfor %}
+            {% if results %}
+                {% for result in results %}
+                <tr {% if search_query == result['keyword'].lower() %}style="background-color: yellow;"{% endif %}>
+                    <td>{{result['keyword']}}</td>
+                    <td>{{result['result']}}</td>
+                    <td>
+                        <form method="post" action="{{ url_for('remove_result') }}" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="keyword" value="{{ result['keyword'] }}">
+                            <button type="submit" class="remove">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" style="text-align: center;">No saved result found.</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}
+{% block footer %}
+    {% include "partials/footer.html" %}
+    {% block how_to_use %}
+    <p><strong>How to Use:</strong> Enter a keyword to search for a specific result, or use the dropdown to sort the results. Click remove to remove a result.</p>
+    {% endblock %}
 {% endblock %}

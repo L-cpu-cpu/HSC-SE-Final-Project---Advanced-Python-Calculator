@@ -6,6 +6,8 @@ import math as mt
 from Modules import formatInput as fi
 
 
+from Modules import calculate as calc
+
 from flask import session
 # INPUTS
 
@@ -361,6 +363,7 @@ def run_formula(formula_name, input_list, ans):
         inputs = [fi.formatInputVar(x) for x in inputs]
         inputs = [fi.addMT(x) for x in inputs]
         # Convert all inputs to float
+        inputs = [calc.calculate(x, ans) for x in inputs]
         inputs = [float(x) for x in inputs]
 
         # Look up the right function

@@ -26,13 +26,12 @@ logging.basicConfig(
     format="%(asctime)s %(message)s",
 )
 
-# Unique basic 16 key
+
 app = Flask(__name__)
 app.secret_key = b"_53oi3uriq9pifpff;apl"
 csrf = CSRFProtect(app)
 
 
-# CSP header
 @csp_header(
     {
         "base-uri": "self",
@@ -68,7 +67,6 @@ def set_default_ans():
 @app.route("/", methods=["POST", "GET"])
 @csp_header(
     {
-        # Server Side CSP is consistent with meta CSP in layout.html
         "base-uri": "'self'",
         "default-src": "'self'",
         "style-src": "'self'",
@@ -95,12 +93,19 @@ def index():
 def results():
     conn = sql.connect("Databases/savedResults.db")
     conn.row_factory = sql.Row
-    savedResults = conn.execute('SELECT * FROM savedResults').fetchall()
+    sort_by = request.args.get("sort", "keyword")
+    if sort_by not in ("keyword", "result"):
+        sort_by = "keyword"
+
+    search_query = request.args.get("search", "").lower()
+    query = f'SELECT * FROM savedResults ORDER BY {sort_by} ASC'
+    savedResults = conn.execute(query).fetchall()
+    if search_query:
+        savedResults = [r for r in savedResults if r["keyword"].lower() == search_query]
     conn.close()
-    return render_template('displayResult.html', results=savedResults)
+    return render_template('displayResult.html', results=savedResults, search_query=search_query)
 
 
-# example CSRF protected form
 @app.route("/formCalcMode.html", methods=["POST", "GET"])
 def calculation():
     if request.method == "POST":
@@ -110,6 +115,7 @@ def calculation():
         session['ans'] = session['result']
         return redirect("/answer.html")
     else:
+
         return render_template("/formCalcMode.html")
 
 
@@ -120,7 +126,7 @@ def answerDisplay():
     save_status = session.pop('save_status', None)
     return render_template("/answer.html", answer=answer, EQinput=EQinput, save_status=save_status, variables=variables)
 
-# Save result to variable
+
 @app.route("/save-variable", methods=["POST"])
 def save_variable():
     var_name = request.form.get("varName")
@@ -133,7 +139,6 @@ def save_variable():
     return "Fail"
 
 
-# Save result to table/database
 @app.route("/save-result", methods=["POST"])
 def save_result():
     keyword = request.form.get("keyword")
@@ -144,9 +149,13 @@ def save_result():
         return "Success"
     return "Fail"
 
-# Placeholder. answer.html will have 2 buttons that allow the user to save the result
-# A button that will bring the user back to the homepage
-# and a button that will redirect the user back to the form
+@app.route("/remove-result", methods=["POST"])
+def remove_result():
+    keyword = request.form.get("keyword")
+    if keyword:
+        from Modules import dbFunctions
+        dbFunctions.removeTable(keyword)
+    return redirect(url_for('results'))
 
 @app.route("/calculateFormula.html", methods=["POST", "GET"])
 def calculateFormula():
@@ -155,11 +164,8 @@ def calculateFormula():
         equation = request.form.get("equation")
         session['equation'] = equation
         dynamic_inputs = request.form.getlist("dynamicInput")
-
-        # You can then pass this into your calculation logic or just store it
         session['inputs'] = dynamic_inputs
         session['selected_formula'] = selected_formula
-        # Use explicit session key access and defaults
         formula_name = session.get('selected_formula', '').strip()
         inputs = session.get('inputs', [])
         ans = session.get('ans')
@@ -168,11 +174,12 @@ def calculateFormula():
         return redirect(url_for('answerDisplay'))
     else:
         return render_template("/calculateFormula.html")
-    
+
 
 @app.route("/regression.html", methods=["GET", "POST"])
 def regressionCalc():
     formula = None
+    unique_filename = None
     if request.method == "POST":
         try:
             x_vals = []
@@ -189,13 +196,14 @@ def regressionCalc():
 
             x_array = np.array(x_vals).reshape(-1, 1)
             y_array = np.array(y_vals)
-            formula = reg.regressionLinear(x_array, y_array)
+            formula, unique_filename = reg.regressionLinear(x_array, y_array)
         except Exception as e:
-            formula = f"Error: {e}"
+            app_log.error(f"Regression calculation failed: {e}")
+            formula = "Something went wrong during regression calculation. Please check your inputs and try again."
 
-    return render_template("regression.html", formula=formula)
+    return render_template("regression.html", formula=formula, plot_path=unique_filename)
 
-# New route for settings page to set rounding
+
 @app.route("/settings.html", methods=["GET", "POST"])
 def set_rounding():
     confirmation = None
@@ -204,12 +212,13 @@ def set_rounding():
             rounding = int(request.form.get("rounding"))
             session['rounding'] = rounding
             confirmation = f"Rounding set to {rounding} decimal places."
-        except:
-            confirmation = "Invalid rounding value."
+        except Exception as e:
+            app_log.error(f"Invalid rounding value: {e}")
+            confirmation = "Invalid input. Please enter a valid whole number between 0 and 10."
 
     return render_template("settings.html", confirmation=confirmation)
 
-# Endpoint for logging CSP violations
+
 @app.route("/csp_report", methods=["POST"])
 @csrf.exempt
 def csp_report():

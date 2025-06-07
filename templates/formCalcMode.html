@@ -1,23 +1,31 @@
 <!--Template for calculation mode-->
 {% extends 'layout.html' %}
 {% block content %}
-<div class="container">
-  <div class="row">
-    <h1>Input</h1>
-  </div>
+<h1>Calculation Mode</h1>
 </div>
 <div class="container">
   <div class="row">
     <form action="/formCalcMode.html" method="POST" class="box">
-      <div class="col-auto">
+      <div class="input-container">
+        <input name="input" type="text" class="input" id="equationInput" pattern="[A-Za-z0-9.*^()+\-\/\s]+" title="Only use letters, numbers, and operators like + - * / ^" placeholder=" " required>
         <label name="equationInput" class="equationInputLabel">Input equation here</label>
-        <input name="input" type="equation" class="input" id="equationInput" pattern="[A-Za-z0-9.*^()+-/]" title="Invalid characters." placeholder="e.g: 1 + 1" required=>
       </div>
       <div class="col-auto">
-        <button type="submit" class="btn btn-primary mb-3">Submit</button>
+        <button type="submit" class="submitText">Submit</button>
       </div>
       <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
     </form>
   </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/noSpecialChar.js') }}"></script>
+{% endblock %}
+{% block footer %}
+    {% include "partials/footer.html" %}
+    {% block how_to_use %}
+    <p><strong>How to Use:</strong> Input your equation and click calculate to calculate. You can also input the keywords of saved results or variable names too!</p>
+    <p><strong>Math functions:</strong> SIN, COS, TAN, SQRT, PI, CBRT, EXP, LOG, DEGREES, RADIANS, ACOS, ASIN, ATAN, E, FACTORIAL</p>
+    <p><strong>For example:</strong> a + 2 * (SIN(20))^3</p>
+    {% endblock %}
 {% endblock %}
