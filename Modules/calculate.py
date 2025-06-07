@@ -6,7 +6,6 @@ from Modules import dbFunctions as dbFunc
 from Modules import formatInput as fi
 
 
-import math as mt
 from flask import session
 # CALCULATE
 

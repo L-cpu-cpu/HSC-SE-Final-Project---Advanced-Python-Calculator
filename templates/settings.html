@@ -6,7 +6,7 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="input-container">
         <input class="input-container" type="number" name="rounding" min="0" max="10" required value="{{ session.get('rounding', 2) }}">
-        <label for="rounding">Decimal Places:</label>
+        <label for="rounding">D.P:</label>
     </div>
     <button type="submit" class="submitText">Set Rounding</button>
 </form>
@@ -17,6 +17,6 @@
 {% block footer %}
     {% include "partials/footer.html" %}
     {% block how_to_use %}
-    <p><strong>How to Use:</strong> Input a number form 1-10 to round all answers in formula mode and calculation mode to that number of significant figures.</p>
+    <p><strong>How to Use:</strong> Input a number form 1-10 to round all answers in formula mode and calculation mode to that number of decimal places.</p>
     {% endblock %}
 {% endblock %}

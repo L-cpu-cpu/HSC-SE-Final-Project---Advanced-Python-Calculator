@@ -8,6 +8,7 @@ from Modules import formatInput as fi
 
 from Modules import calculate as calc
 
+
 from flask import session
 # INPUTS
 
@@ -295,6 +296,7 @@ def quarticFourthDerivValue(a, x):
 
 # Physics
 
+#motion, forces and gravity
 
 def newtonSecondLawForce(mass, acceleration):
     ans = mass * acceleration
@@ -308,6 +310,134 @@ def newtonSecondLawMass(force, acceleration):
 
 def newtonSecondLawAcc(force, mass):
     ans = force * mass
+    return ans
+
+
+def momentumMomentum(mass, velocity):
+    ans = mass * velocity
+    return ans
+
+
+def momentumMass(momentum, velocity):
+    ans = momentum / velocity
+    return ans
+
+
+def momentumVelocity(momentum, mass):
+    ans = momentum / mass
+    return ans
+
+
+def kineticEnergyEnergy(mass, velocity):
+    ans = 0.5 * mass * (velocity ** 2)
+    return ans
+
+
+def kineticEnergyMass(energy, velocity):
+    ans = (2 * energy) / (velocity ** 2)
+    return ans
+
+
+def kineticEnergyVelocity(energy, mass):
+    ans = mt.sqrt((2 * energy) / mass)
+    return ans
+
+
+def gravitationalPotentialEnergyEnergy(mass, height):
+    ans = mass * 9.81 * height
+    return ans
+
+
+def gravitationalPotentialEnergyMass(energy, height):
+    ans = energy / (9.81 * height)
+    return ans
+
+
+def gravitationalPotentialEnergyHeight(energy, mass):
+    ans = energy / (9.81 * mass)
+    return ans
+
+
+# suvat equations
+
+
+def suvatDisplacement(initialVelocity, time, acceleration):
+    ans = (initialVelocity * time) + (0.5 * acceleration * (time ** 2))
+    return ans
+
+
+def suvatInitialVelocity(displacement, time, acceleration):
+    ans = (displacement - (0.5 * acceleration * (time ** 2))) / time
+    return ans
+
+
+def suvatFinalVelocity(initialVelocity, acceleration, time):
+    ans = initialVelocity + (acceleration * time)
+    return ans
+
+
+def suvatAcceleration(displacement, initialVelocity, time):
+    ans = (displacement - (initialVelocity * time)) / (0.5 * time ** 2)
+    return ans
+
+
+def suvatTime(finalVelocity, initialVelocity, acceleration):
+    ans = (finalVelocity - initialVelocity) / acceleration
+    return ans
+
+
+# relativity
+
+
+def einsteinEnergy(mass):
+    ans = mass * (3 * 10 ** 8) ** 2
+    return ans
+
+
+def einsteinMass(energy):
+    ans = energy / (3 * 10 ** 8) ** 2
+    return ans
+
+
+def timeDilationProperTime(time, velocity):
+    # Using the Lorentz factor for time dilation
+    lorentz_factor = 1 / mt.sqrt(1 - (velocity ** 2))
+    ans = time * lorentz_factor
+    return ans
+
+
+def timeDilationVelocity(properTime, time):
+    # Rearranging the time dilation formula to find velocity
+    lorentz_factor = time / properTime
+    velocity = mt.sqrt(1 - (1 / lorentz_factor ** 2))
+    return velocity
+
+
+def timeDilationTime(properTime, velocity):
+    # Rearranging the time dilation formula to find time
+    lorentz_factor = 1 / mt.sqrt(1 - (velocity ** 2))
+    ans = properTime * lorentz_factor
+    return ans
+
+
+def lengthContractionProperLength(length, velocity):
+    # Using the Lorentz factor for length contraction
+    lorentz_factor = 1 / mt.sqrt(1 - (velocity ** 2))
+    ans = length * lorentz_factor
+    return ans
+
+
+def lengthContractionVelocity(properLength, length):
+    # Rearranging the length contraction formula to find velocity
+    lorentz_factor = properLength / length
+    velocity = mt.sqrt(1 - (1 / lorentz_factor ** 2))
+    return velocity
+
+
+def lengthContractionLength(properLength, velocity):
+    # Rearranging the length contraction formula to find length
+    lorentz_factor = 1 / mt.sqrt(1 - (velocity ** 2))
+    ans = properLength * lorentz_factor
     return ans
 
 
@@ -351,6 +481,28 @@ formula_map = {
     "Second Law (Force)": newtonSecondLawForce,
     "Second Law (Mass)": newtonSecondLawMass,
     "Second Law (Acceleration)": newtonSecondLawAcc,
+    "Momentum (Momentum)": momentumMomentum,
+    "Momentum (Mass)": momentumMass,
+    "Momentum (Velocity)": momentumVelocity,
+    "Kinetic Energy (Energy)": kineticEnergyEnergy,
+    "Kinetic Energy (Mass)": kineticEnergyMass,
+    "Kinetic Energy (Velocity)": kineticEnergyVelocity,
+    "Gravitational Potential Energy (Energy)": gravitationalPotentialEnergyEnergy,
+    "Gravitational Potential Energy (Mass)": gravitationalPotentialEnergyMass,
+    "Gravitational Potential Energy (Height)": gravitationalPotentialEnergyHeight,
+    "Displacement (SUVAT)": suvatDisplacement,
+    "Initial Velocity (SUVAT)": suvatInitialVelocity,
+    "Final Velocity (SUVAT)": suvatFinalVelocity,
+    "Acceleration (SUVAT)": suvatAcceleration,
+    "Time (SUVAT)": suvatTime,
+    "Einstein (Energy)": einsteinEnergy,
+    "Einstein (Mass)": einsteinMass,
+    "Time Dilation (Proper Time)": timeDilationProperTime,
+    "Time Dilation (Velocity)": timeDilationVelocity,
+    "Time Dilation (Time)": timeDilationTime,
+    "Length Contraction (Proper Length)": lengthContractionProperLength,
+    "Length Contraction (Velocity)": lengthContractionVelocity,
+    "Length Contraction (Length)": lengthContractionLength
 }
 
 

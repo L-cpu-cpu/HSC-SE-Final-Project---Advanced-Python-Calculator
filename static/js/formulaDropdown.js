@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
         areaAndPerim: [{text: 'Triangles', value: 'triangles'}, {text: 'Quadrilaterals', value: 'quadrilaterals'}, {text: 'Circles', value: 'circles'}],
         Trig: [{text: 'Pythagoras', value: 'pythagoras'}, {text: 'Rules', value: 'rules'}],
         poly: [{text: 'Quadratics', value: 'quadratics'}, {text: 'Cubics', value: 'cubics'}, {text: 'Quartics', value: 'quartics'}],
-        phys: [{text: 'Newtonian', value: 'newtonian'}, {text: '...?', value: '...?'}, {text: '...? ', value: '...?'}]
+        phys: [{text: 'Motion, forces and gravity', value: 'mfg'}, {text: 'SUVAT', value: 'suvat'}, {text: 'Relativity', value: 'relativity'}]
     };
     const subOptions = {
     triangles: [{text: 'Right angle Triangles', value: 2}, {text: 'Non-right angle Triangles', value: 3}],
@@ -67,7 +67,9 @@ document.addEventListener("DOMContentLoaded", function () {
     quadratics: [{text: 'Find y (quadratic)', value: 4}, {text: 'Quadratic Formula', value: 3}, {text: 'Vertex (x)', value: 2}, {text: 'Vertex (y)', value: 3}, {text: 'First derivative (quadratic)', value: 3}, {text: 'Second derivative (quadratic)', value: 2}],
     cubics: [{text: 'Find y (cubic)', value: 5}, {text: 'First derivative (cubic)', value: 4}, {text: 'Second derivative (cubic)', value: 3}, {text: 'Third derivative (cubic)', value: 2}],
     quartics: [{text: 'Find y (quartic)', value: 6}, {text: 'First derivative (quartic)', value: 5}, {text: 'Second derivative (quartic)', value: 4}, {text: 'Third derivative (quartic)', value: 3}, {text: 'Fourth derivative', value: 2}],
-    newtonian: [{text: 'Second Law (Force)', value: 2}, {text: 'Second Law (Mass)', value: 2}, {text: 'Second Law (Acceleration)', value: 2}]
+    mfg: [{text: 'Second Law (Force)', value: 2}, {text: 'Second Law (Mass)', value: 2}, {text: 'Second Law (Acceleration)', value: 2}, {text: 'Momentum (Momentum)', value: 2}, {text: 'Momentum (Mass)', value: 2}, {text: 'Momentum (Velocity)', value: 2}, {text: 'Kinetic Energy (Energy)', value: 2}, {text: 'Kinetic Energy (Mass)', value: 2}, {text: 'Kinetic Energy (Velocity)', value: 2}, {text: 'Gravitational Potential Energy (Energy)', value: 2}, {text: 'Gravitational Potential Energy (Mass)', value: 2}, {text: 'Gravitational Potential Energy (Height)', value: 2}],
+    suvat: [{text: 'Displacement (SUVAT)', value: 3}, {text: 'Velocity (SUVAT)', value: 3}, {text: 'Acceleration (SUVAT)', value: 3}, {text: 'Time (SUVAT)', value: 3}, {text: 'Final Velocity (SUVAT)', value: 3}, {text: 'Initial Velocity (SUVAT)', value: 3}],
+    relativity: [{text: 'Einstein (Energy)', value: 1}, {text: 'Einstein (Mass)', value: 1}, {text: 'Time Dilation (Time)', value: 2}, {text: 'Time Dilation (Proper Time)', value: 2}, {text: 'Time Dilation (Velocity)', value: 2}, {text: 'Length Contraction (Length)', value: 2}, {text: 'Length Contraction (Proper Length)', value: 2}, {text: 'Length Contraction (Velocity)', value: 2}]
     };
 
     const InputPlaceholders = {
@@ -122,11 +124,37 @@ document.addEventListener("DOMContentLoaded", function () {
         'Third derivative (quartic)': ['a', 'b', 'x'],
         'Fourth derivative': ['a', 'x']
     },
-    newtonian: {
+    mfg: {
         'Second Law (Force)': ['Mass (m)', 'Acceleration (a)'],
         'Second Law (Mass)': ['Force (F)', 'Acceleration (a)'],
-        'Second Law (Acceleration)': ['Force (F)', 'Mass (m)']
+        'Second Law (Acceleration)': ['Force (F)', 'Mass (m)'],
+        'Momentum (Momentum)': ['Mass (m)', 'Velocity (v)'],
+        'Momentum (Mass)': ['Momentum (p)', 'Velocity (v)'],
+        'Momentum (Velocity)': ['Momentum (p)', 'Mass (m)'],
+        'Kinetic Energy (Energy)': ['Mass (m)', 'Velocity (v)'],
+        'Kinetic Energy (Mass)': ['Energy (E)', 'Velocity (v)'],
+        'Kinetic Energy (Velocity)': ['Energy (E)', 'Mass (m)'],
+        'Gravitational Potential Energy (Energy)': ['Mass (m)', 'Height (h)'],
+        'Gravitational Potential Energy (Mass)': ['Energy (E)', 'Height (h)'],
+        'Gravitational Potential Energy (Height)': ['Energy (E)', 'Mass (m)']
     },
+    suvat: {
+        'Displacement (SUVAT)': ['Initial Velocity (u)', 'Time (t)', 'Final Velocity (v)'],
+        'Initial Velocity (SUVAT)': ['Displacement (s)', 'Time (t)', 'Acceleration (a)'],
+        'Acceleration (SUVAT)': ['Displacement (vs', 'Initial Velocity (u)', 'Time (t)'],
+        'Time (SUVAT)': ['Final Velocity (v)', 'Initial Velocity (u)', 'Acceleration (a)'],
+        'Final Velocity (SUVAT)': ['Initial Velocity (u)', 'Acceleration (a)', 'Time (t)'],
+    },
+    relativity: {
+        'Einstein (Energy)': ['Mass (m)'],
+        'Einstein (Mass)': ['Energy (E)'],
+        'Time Dilation (Time)': ['Proper Time (τ)', 'Velocity (v/c)'],
+        'Time Dilation (Proper Time)': ['Time (t)', 'Velocity (v/c)'],
+        'Time Dilation (Velocity)': ['Proper Time (τ)', 'Time (t)'],
+        'Length Contraction (Length)': ['Proper Length (L₀)', 'Velocity (v/c)'],
+        'Length Contraction (Proper Length)': ['Length (L)', 'Velocity (v/c)'],
+        'Length Contraction (Velocity)': ['Proper Length (L₀)', 'Length (L)']
+    }
     };
         const formulaEquations = {
         "Right angle Triangles": "A = ½ × base × height",
@@ -166,7 +194,29 @@ document.addEventListener("DOMContentLoaded", function () {
         "Fourth derivative": "d⁴y/dx⁴ = 24a",
         "Second Law (Force)": "F = m × a",
         "Second Law (Mass)": "m = F / a",
-        "Second Law (Acceleration)": "a = F / m"
+        "Second Law (Acceleration)": "a = F / m",
+        "Momentum (Momentum)": "p = m × v",
+        "Momentum (Mass)": "m = p / v",
+        "Momentum (Velocity)": "v = p / m",
+        "Kinetic Energy (Energy)": "E = ½mv²",
+        "Kinetic Energy (Mass)": "m = 2E / v²",
+        "Kinetic Energy (Velocity)": "v = √(2E / m)",
+        "Gravitational Potential Energy (Energy)": "E = mgh",
+        "Gravitational Potential Energy (Mass)": "m = E / gh",
+        "Gravitational Potential Energy (Height)": "h = E / (mg)",
+        "Displacement (SUVAT)": "s = ut + ½at²",
+        "Initial Velocity (SUVAT)": "u = s/t - ½at",
+        "Acceleration (SUVAT)": "a = (s - ut) / (½t²)",
+        "Time (SUVAT)": "t = (v - u) / a",
+        "Final Velocity (SUVAT)": "v = u + at",
+        "Einstein (Energy)": "E = mc²",
+        "Einstein (Mass)": "m = E / c²",
+        "Time Dilation (Time)": "t = τ / √(1 - v²/c²)",
+        "Time Dilation (Proper Time)": "τ = t × √(1 - v²/c²)",
+        "Time Dilation (Velocity)": "v = c × √(1 - τ²/t²)",
+        "Length Contraction (Length)": "L = L₀ × √(1 - v²/c²)",
+        "Length Contraction (Proper Length)": "L₀ = L / √(1 - v²/c²)",
+        "Length Contraction (Velocity)": "v = c × √(1 - L²/L₀²)"
     };
 
     const radios = document.querySelectorAll('input[name="category"]');

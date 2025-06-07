@@ -2,9 +2,7 @@ from flask import Flask, url_for
 from flask import redirect
 from flask import render_template
 from flask import request
-from flask import jsonify
 from flask import session
-import requests
 from flask_wtf import CSRFProtect
 from flask_csp.csp import csp_header
 import sqlite3 as sql
@@ -14,7 +12,6 @@ from Modules import calculate as calc
 from Modules import formulae as form
 from Modules.variables import variables
 from Modules import regression as reg
-import reprlib
 import logging
 
 
