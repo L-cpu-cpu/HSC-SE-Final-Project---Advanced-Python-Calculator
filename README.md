@@ -16,15 +16,15 @@ This PWA is done for the Year 12 HSC Software Engineering final project
 
 # Dependencies:
 This program requires the following libraries installed with a virtual environment created and activated:
-math
-matplotlib
-pandas
-numpy
-flask (Flask, request, session, url_for, render_template)
-flask_wtf (CSRFProtect)
-flask_csp (flask_csp)
-logging
-sqlite3
-scikit_learn (LinearRegression)
-os
-uuid
+- math
+- matplotlib
+- pandas
+- numpy
+- flask (Flask, request, session, url_for, render_template)
+- flask_wtf (CSRFProtect)
+- flask_csp (flask_csp)
+- logging
+- sqlite3
+- scikit_learn (LinearRegression)
+- os
+- uuid
